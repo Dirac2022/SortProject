@@ -9,6 +9,8 @@ package uni.aed.sortproject;
  * @author mitch
  */
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import uni.aed.gui.SortJFrame;
 
 public class SortProject {

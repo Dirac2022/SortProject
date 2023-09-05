@@ -4,8 +4,15 @@
  */
 package uni.aed.gui;
 
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import uni.aed.Comparator.NumberComparator;
 import uni.aed.ordenamiento.BubbleSort;
+import uni.aed.ordenamiento.Ordenamiento;
 
 /**
  *
@@ -13,16 +20,27 @@ import uni.aed.ordenamiento.BubbleSort;
  */
 public class SortJFrame extends javax.swing.JFrame {
 
+    ImageIcon icono;
     DefaultListModel modeloList1 = new DefaultListModel();
     DefaultListModel modeloList2 = new DefaultListModel();
+    
+    String [] columnas = {"Sort Algorithm", "# swaps", "# comparisons", "Running time (ns)"};
+    String datos [][];
+    //ArrayList<String> columns;
+    //ArrayList<ArrayList<String>> data;
+    DefaultTableModel modeloTabla;
+    boolean descendente = false;
     
     /**
      * Creates new form SortJFrame
      */
     public SortJFrame() {
         initComponents();
+        icono = new ImageIcon("C:\\Users\\mitch\\OneDrive\\Documentos\\NetBeansProjects\\SortProject\\src\\main\\java\\uni\\aed\\icons\\iconBatman.png");
         listInicial.setModel(modeloList1);
         listOrdenada.setModel(modeloList2);
+        modeloTabla = new DefaultTableModel(datos, columnas);
+        tabla.setModel(modeloTabla);
     }
 
     /**
@@ -34,35 +52,166 @@ public class SortJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblMsg = new javax.swing.JLabel();
-        txtValue = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        panelInput = new javax.swing.JPanel();
+        lblChooseSort = new javax.swing.JLabel();
+        cboxSort = new javax.swing.JComboBox<>();
+        lblMsgInput = new javax.swing.JLabel();
+        txtValues = new javax.swing.JTextField();
+        panelSorting = new javax.swing.JPanel();
+        scrollpnList1 = new javax.swing.JScrollPane();
         listInicial = new javax.swing.JList<>();
-        btnClean = new javax.swing.JButton();
-        btnClose = new javax.swing.JButton();
-        btnOrdenar = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        scrollpList2 = new javax.swing.JScrollPane();
         listOrdenada = new javax.swing.JList<>();
+        btnSort = new javax.swing.JButton();
+        chboxDescending = new javax.swing.JCheckBox();
+        btnCleanLists = new javax.swing.JButton();
+        panelStatistics = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+        btnCleanTable = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Algoritmo de Ordenamiento Burbuja");
 
-        lblMsg.setText("Ingrese los valores a ordenar");
+        lblChooseSort.setText("Choose sort algorithm");
 
-        txtValue.addActionListener(new java.awt.event.ActionListener() {
+        cboxSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bubble", "Insertion", "Binary Insertion", "Selection", "Bubble Object" }));
+
+        lblMsgInput.setText("Enter the values to be sorted:");
+
+        txtValues.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValueActionPerformed(evt);
+                txtValuesActionPerformed(evt);
             }
         });
 
-        jScrollPane1.setViewportView(listInicial);
+        javax.swing.GroupLayout panelInputLayout = new javax.swing.GroupLayout(panelInput);
+        panelInput.setLayout(panelInputLayout);
+        panelInputLayout.setHorizontalGroup(
+            panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInputLayout.createSequentialGroup()
+                .addComponent(lblMsgInput, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panelInputLayout.createSequentialGroup()
+                .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtValues)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInputLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblChooseSort, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboxSort, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelInputLayout.setVerticalGroup(
+            panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInputLayout.createSequentialGroup()
+                .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblChooseSort)
+                    .addComponent(cboxSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(lblMsgInput)
+                .addGap(18, 18, 18)
+                .addComponent(txtValues, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
 
-        btnClean.setText("Limpiar");
-        btnClean.addActionListener(new java.awt.event.ActionListener() {
+        scrollpnList1.setViewportView(listInicial);
+
+        scrollpList2.setViewportView(listOrdenada);
+
+        btnSort.setText("Sort");
+        btnSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCleanActionPerformed(evt);
+                btnSortActionPerformed(evt);
             }
         });
+
+        chboxDescending.setText("Descending");
+        chboxDescending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chboxDescendingActionPerformed(evt);
+            }
+        });
+
+        btnCleanLists.setText("Clean");
+        btnCleanLists.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanListsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelSortingLayout = new javax.swing.GroupLayout(panelSorting);
+        panelSorting.setLayout(panelSortingLayout);
+        panelSortingLayout.setHorizontalGroup(
+            panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSortingLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(scrollpnList1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(73, 73, 73)
+                .addGroup(panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(chboxDescending, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(btnSort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCleanLists, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(87, 87, 87)
+                .addComponent(scrollpList2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+        );
+        panelSortingLayout.setVerticalGroup(
+            panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollpList2)
+            .addGroup(panelSortingLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(btnSort)
+                .addGap(18, 18, 18)
+                .addComponent(chboxDescending)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCleanLists)
+                .addContainerGap(52, Short.MAX_VALUE))
+            .addComponent(scrollpnList1, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tabla);
+
+        btnCleanTable.setText("Clean");
+        btnCleanTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanTableActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelStatisticsLayout = new javax.swing.GroupLayout(panelStatistics);
+        panelStatistics.setLayout(panelStatisticsLayout);
+        panelStatisticsLayout.setHorizontalGroup(
+            panelStatisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelStatisticsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCleanTable, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                .addGap(9, 9, 9))
+        );
+        panelStatisticsLayout.setVerticalGroup(
+            panelStatisticsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelStatisticsLayout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addComponent(btnCleanTable)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelStatisticsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         btnClose.setText("Cerrar");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
@@ -71,105 +220,138 @@ public class SortJFrame extends javax.swing.JFrame {
             }
         });
 
-        btnOrdenar.setText("Ordenar");
-        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrdenarActionPerformed(evt);
-            }
-        });
-
-        jScrollPane2.setViewportView(listOrdenada);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(panelSorting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)
-                                .addComponent(btnOrdenar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(btnClean)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnClose)
-                                .addGap(23, 23, 23)))
-                        .addGap(20, 20, 20))))
+                                .addGap(6, 6, 6)
+                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(lblMsg)
-                        .addGap(12, 12, 12)
-                        .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(btnOrdenar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClose)
-                    .addComponent(btnClean))
-                .addGap(19, 19, 19))
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(panelInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(panelSorting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnClose)
+                .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValueActionPerformed
+    private void txtValuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValuesActionPerformed
         
-        modeloList1.addElement(txtValue.getText());
-        txtValue.setText("");
-    }//GEN-LAST:event_txtValueActionPerformed
+        String value = txtValues.getText();
+        try {
+            Double num1 = Double.parseDouble(value);
+            Integer num2 = Integer.parseInt(value);
+            modeloList1.addElement(txtValues.getText());
+            txtValues.setText("");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(rootPane, "Valor ingresado no válido", 
+                                        "Error ", JOptionPane.ERROR_MESSAGE, icono);
+            txtValues.selectAll();
+        }
+    }//GEN-LAST:event_txtValuesActionPerformed
 
-    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
+    private void btnSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortActionPerformed
+        NumberComparator comp = new NumberComparator();
         Integer N = listInicial.getModel().getSize();
         Integer [] X = new Integer[N];
-        //X = (Integer[]) modeloList1.toArray();
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++)
             X[i] = Integer.parseInt(listInicial.getModel().getElementAt(i));
+        
+        Ordenamiento ord = new Ordenamiento();
+        
+        switch(cboxSort.getSelectedIndex()){
+            case 0 ->{
+                ord.burbuja(X);
+            }
+            
+            case 1 -> {
+                ord.insertion(X);
+            }
+            
+            case 2 -> {
+                ord.binaryInsertion(X);
+            }
+            
+            case 3 -> {
+                ord.selection(X);
+            }
+            
+            case 4 -> {
+                try {
+                    ord.bubble(X, comp);
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(rootPane, e.getMessage());
+                }
+                
+            }
         }
         
-        BubbleSort o = new BubbleSort();
-        
-        BubbleSort.burbuja(X);
-        
         modeloList2.removeAllElements();
         
-        for (int i = 0; i < N ; i++)
-            modeloList2.addElement(X[i]);
+        if(descendente)
+            for (int i = N - 1; i >= 0 ; i--)
+                modeloList2.addElement(X[i]);
+        else
+            for (int i = 0; i < N ; i++)
+                modeloList2.addElement(X[i]);
         
         listOrdenada.setModel(modeloList2);
-    }//GEN-LAST:event_btnOrdenarActionPerformed
+        
+        String sortAlgorithm = cboxSort.getSelectedItem().toString();
+        int swaps = ord.getIntercambios();
+        int comparisons = ord.getComparaciones();
+        long runningTime = ord.getRunningTime();
+        
+        String [] newRow = new String[4];
+        newRow[0] = sortAlgorithm;
+        newRow[1] = String.valueOf(swaps); 
+        newRow[2] = String.valueOf(comparisons); 
+        newRow[3] = String.valueOf(runningTime);
+        
+        modeloTabla.addRow(newRow);
+        tabla.setModel(modeloTabla);
+    }//GEN-LAST:event_btnSortActionPerformed
 
-    private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
+    private void btnCleanListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanListsActionPerformed
         modeloList1.removeAllElements();
         modeloList2.removeAllElements();
-    }//GEN-LAST:event_btnCleanActionPerformed
+    }//GEN-LAST:event_btnCleanListsActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void chboxDescendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chboxDescendingActionPerformed
+       
+        descendente = (descendente) ? false : true;
+    }//GEN-LAST:event_chboxDescendingActionPerformed
+
+    private void btnCleanTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanTableActionPerformed
+        modeloTabla = new DefaultTableModel(datos, columnas);
+        tabla.setModel(modeloTabla);
+    }//GEN-LAST:event_btnCleanTableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,14 +389,23 @@ public class SortJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClean;
+    private javax.swing.JButton btnCleanLists;
+    private javax.swing.JButton btnCleanTable;
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnOrdenar;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblMsg;
+    private javax.swing.JButton btnSort;
+    private javax.swing.JComboBox<String> cboxSort;
+    private javax.swing.JCheckBox chboxDescending;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblChooseSort;
+    private javax.swing.JLabel lblMsgInput;
     private javax.swing.JList<String> listInicial;
     private javax.swing.JList<String> listOrdenada;
-    private javax.swing.JTextField txtValue;
+    private javax.swing.JPanel panelInput;
+    private javax.swing.JPanel panelSorting;
+    private javax.swing.JPanel panelStatistics;
+    private javax.swing.JScrollPane scrollpList2;
+    private javax.swing.JScrollPane scrollpnList1;
+    private javax.swing.JTable tabla;
+    private javax.swing.JTextField txtValues;
     // End of variables declaration//GEN-END:variables
 }
