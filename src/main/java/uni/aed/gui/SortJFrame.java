@@ -83,6 +83,7 @@ public class SortJFrame extends javax.swing.JFrame {
 
         lblMsgInput.setText("Enter the values to be sorted:");
 
+        txtValues.setEditable(false);
         txtValues.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtValuesActionPerformed(evt);
@@ -93,9 +94,19 @@ public class SortJFrame extends javax.swing.JFrame {
 
         btnGroup.add(rbtnInteger);
         rbtnInteger.setText("Integer");
+        rbtnInteger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnIntegerActionPerformed(evt);
+            }
+        });
 
         btnGroup.add(rbtnDecimal);
         rbtnDecimal.setText("Decimal");
+        rbtnDecimal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnDecimalActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelInputLayout = new javax.swing.GroupLayout(panelInput);
         panelInput.setLayout(panelInputLayout);
@@ -251,18 +262,19 @@ public class SortJFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelSorting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(panelSorting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -284,21 +296,25 @@ public class SortJFrame extends javax.swing.JFrame {
 
     private void txtValuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValuesActionPerformed
         
-        if(btnGroup.getSelection() == null){
-            JOptionPane.showMessageDialog(rootPane, "Eliga el tipo de número a ingresar", 
-                                            "Lista vacía", JOptionPane.WARNING_MESSAGE, icono);
-        }
-        else{
-            String value = txtValues.getText();
-        
-            if (Validator.isDouble(value) || Validator.isInteger(value)){
-                    modeloList1.addElement(txtValues.getText());
-                    txtValues.setText("");
+        String texto = txtValues.getText();
+        if(rbtnInteger.isSelected()){
+            try{
+                Integer value = Integer.parseInt(texto);
+                modeloList1.addElement(texto);
+                txtValues.setText("");
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(rootPane, "Debe ingresar un tipo entero", 
+                                            "Error en tipo de dato", JOptionPane.WARNING_MESSAGE, icono);
             }
-            else{  
-                JOptionPane.showMessageDialog(rootPane, "Valor ingresado no válido", 
-                                            "Error ", JOptionPane.ERROR_MESSAGE, icono);
-                txtValues.selectAll();
+        }
+        if(rbtnDecimal.isSelected()){
+            try{
+                Double value = Double.parseDouble(texto);
+                modeloList1.addElement(texto);
+                txtValues.setText("");
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(rootPane, "Debe ingresar un tipo decimal", 
+                                            "Error en tipo de dato", JOptionPane.WARNING_MESSAGE, icono);
             }
         }
         
@@ -306,8 +322,16 @@ public class SortJFrame extends javax.swing.JFrame {
 
     private void btnSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortActionPerformed
         
+            
         Comparator comp;
         Integer N = listInicial.getModel().getSize();
+        if(N.equals(0)){
+            JOptionPane.showMessageDialog(rootPane, "La lista esta vacía", 
+                    "Advertencia", JOptionPane.INFORMATION_MESSAGE, icono);
+            return ;
+        }
+            
+
         Object [] X = new Object [N];
         
         if (rbtnInteger.isSelected()){
@@ -405,6 +429,14 @@ public class SortJFrame extends javax.swing.JFrame {
         modeloTabla = new DefaultTableModel(datos, columnas);
         tabla.setModel(modeloTabla);
     }//GEN-LAST:event_btnCleanTableActionPerformed
+
+    private void rbtnIntegerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnIntegerActionPerformed
+        txtValues.setEditable(true);
+    }//GEN-LAST:event_rbtnIntegerActionPerformed
+
+    private void rbtnDecimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnDecimalActionPerformed
+        txtValues.setEditable(true);
+    }//GEN-LAST:event_rbtnDecimalActionPerformed
 
     /**
      * @param args the command line arguments
