@@ -5,16 +5,16 @@
 package uni.aed.ordenamiento;
 
 import java.util.Comparator;
-import java.util.Date;
 
 /**
  *
  * @author mitch
  */
-public class Ordenamiento {
+public class Sort {
     
     int intercambios, comparaciones;
     long inicioEjecucion, finEjecucion, tiempoEjecucion;
+    static long startTime, endTime, totalTime;
     
     public int getIntercambios(){
         return intercambios;
@@ -28,31 +28,16 @@ public class Ordenamiento {
         return finEjecucion - inicioEjecucion;
     }
     
-    public Integer[] burbuja(Integer [] X){      
-        inicioEjecucion = System.nanoTime();
-        intercambios = 0;
-        comparaciones = 0;
-        int aux = 0;
-        for (int i = 0; i < X.length - 1; i++){
-            for (int j = 0; j < X.length - 1; j++) {
-                comparaciones ++;
-                if (X[j] > X[j+1]){
-                    aux = X[j];
-                    X[j] = X[j+1];
-                    X[j+1] = aux;
-                    intercambios ++;
-                }
-            }
-        }
-        finEjecucion = System.nanoTime();
-        return X;
+    public long getTotalTime(){
+        return endTime - startTime;
     }
     
+
     public Object [] bubble (Object [] X, Comparator comp){
         inicioEjecucion = System.nanoTime();
         intercambios = 0;
         comparaciones = 0;
-        Object aux = 0;
+        Object aux;
         for (int i = 0; i < X.length - 1; i++){
             for (int j = 0; j < X.length - 1; j++) {
                 comparaciones ++;
@@ -70,20 +55,21 @@ public class Ordenamiento {
     
     
     
-    public Integer [] insertion(Integer [] X){
+    public Object [] insertion(Object [] X, Comparator comp){
         inicioEjecucion = System.nanoTime();
         intercambios = 0;
         comparaciones = 0;
-        int  current, k;
-        boolean sw = false;
+        Object current;
+        int k;
+        boolean sw;
         for (int i = 1; i < X.length; i++) {
             current = X[i];
             k = i - 1;
             sw = false;
             while (sw == false && k >= 0) { 
                 comparaciones ++;
-                if(current < X[k]){
-                    X[k+1]=X[k];
+                if (comp.compare(current, X[k]) < 0){
+                    X[k + 1] = X[k];
                     k --;
                     intercambios ++;
                 }
@@ -96,76 +82,115 @@ public class Ordenamiento {
         return X;
     }
     
-    public Integer [] binaryInsertion(Integer [] X) {
+    public Object [] binaryInsertion(Object [] X, Comparator comp) {
         inicioEjecucion = System.nanoTime();
         intercambios = 0;
         comparaciones = 0;
-        int aux, p, u, c;
-        for(int i = 1; i < X.length; i++){      // i = 2
-            aux = X[i];                         // aux = X[1] = 8
-            p = 0;                              // p = 0
-            u = i - 1;                          // u = 0
-            while(p <= u){                      // 1 <= 0 No
+        Object aux; 
+        int p, u, c;
+        for(int i = 1; i < X.length; i++){      
+            aux = X[i];                         
+            p = 0;                              
+            u = i - 1;                          
+            while(p <= u){                      
                 comparaciones ++;
-                c = (p + u) / 2;                // c = 0
-                if(aux < X[c])                  // 8 < 7 No
-                    u = c - 1;                  //
+                c = (p + u) / 2;                
+                if(comp.compare(aux, X[c]) < 0)                  
+                    u = c - 1;                  
                 else                        
-                    p = c + 1;                  // p = 1
+                    p = c + 1;                  
                 intercambios ++;
             }
-            for (int k = i - 1; k >= p; k--)    // 0 1 2 3 4        // k = 3    
-                X[k + 1] = X[k];                // 7 8 4 6 1    
-            X[p] = aux;                         // 4 7 8 4 6
+            for (int k = i - 1; k >= p; k--)        
+                X[k + 1] = X[k];                    
+            X[p] = aux;                         
         }
         finEjecucion = System.nanoTime();
         return X;
     }
     
-    public Integer [] selection(Integer [] X){
+    public Object [] selection(Object [] X, Comparator comp){
         inicioEjecucion = System.nanoTime();
         intercambios = 0;
         comparaciones = 0;
-        int menor, k;
+        Object menor;
+        int k;
         for (int i = 0; i < X.length - 1; i++) {
             menor = X[i];
             k = i;
             for (int j = i + 1; j < X.length; j++) {
                 comparaciones ++;
-                if(X[j] < menor){
+                if(comp.compare(X[j], menor) < 0){
                     menor = X[j];
                     k = j;
-                }
-                
+                }  
             }            
             X[k] = X[i];
             X[i] = menor;
             intercambios ++;
         }
-        
         finEjecucion = System.nanoTime();
         return X;
     }
     
-    public <K> void merge(K[] S1, K[] S2, K[] S, Comparator<K> comp){
+    private <T> void merge(T[] S1, T[] S2, T[] S, Comparator<T> comp){
         int i = 0, j = 0;
         while (i + j < S.length){
-            if (j == S2.length || (i < S1.length && comp.compare(S[i], S[j]) < 0))
-                S[i + j] = S[i ++];
+            if (j == S2.length || (i < S1.length && comp.compare(S1[i], S2[j]) < 0))
+                S[i + j] = S1[i ++];
             else
                 S[i + j] = S2[j ++];
         }
     }
     
-    public <K> void mergeSort(K[] S, Comparator<K> comp){
+    public <T> void mergeSort(T[] S, Comparator<T> comp){
         int n = S.length;
         if (n < 2 ) return;
         int mid = n / 2;
-        K[] S1 = java.util.Arrays.copyOfRange(S, 0, mid);
-        K[] S2 = java.util.Arrays.copyOfRange(S, mid, n);
+        T[] S1 = java.util.Arrays.copyOfRange(S, 0, mid);
+        T[] S2 = java.util.Arrays.copyOfRange(S, mid, n);
         mergeSort(S1, comp);
         mergeSort(S2, comp);
         merge(S1, S2, S, comp);
     }
     
+    
+    
+    
+    private <T> void quickSortInPlace(T[] S, Comparator<T> comp, int a, int b){
+        if (a >= b) return;
+        int left = a;
+        int right = b - 1;
+        T pivot = S[b];
+        T temp;
+        while (left <= right) {
+            while (left <= right && comp.compare(S[left], pivot) < 0)
+                left ++;
+            while (left <= right && comp.compare(S[right], pivot) > 0)
+                right --;
+            if (left <= right) {
+                temp = S[left];
+                S[left] = S[right];
+                S[right] = temp;
+                left ++;
+                right --;
+            }
+        }
+        
+        temp = S[left];
+        S[left] = S[b];
+        S[b] = temp;
+        
+        quickSortInPlace(S, comp, a, left - 1);
+        quickSortInPlace(S, comp, left + 1, b);
+    }
+    
+    public <T> void quickSort(T[] X, Comparator<T> comp){
+        inicioEjecucion = System.nanoTime();
+        quickSortInPlace(X, comp, 0, X.length - 1);
+        finEjecucion = System.nanoTime();
+    }
+
+    
 }
+

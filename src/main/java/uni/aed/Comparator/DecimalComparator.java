@@ -10,17 +10,17 @@ import java.util.Comparator;
  *
  * @author Mitchel
  */
-public class NumberComparator implements Comparator {
+public class DecimalComparator implements Comparator {
     
     @Override
     public int compare(Object ob1, Object ob2){
-        if (ob1 instanceof Number && ob2 instanceof Number){
-            Double num1 = (Double)(ob1);
-            Double num2 = (Double)(ob2);
+        if (ob1 instanceof Double && ob2 instanceof Double){
+            Double num1 = (Double)ob1;
+            Double num2 = (Double)ob2;
             return num1.compareTo(num2);    
         }
         else {
-            throw new IllegalArgumentException("Los objectos no son innstancias de Number");
+            throw new IllegalArgumentException("Los objectos no son innstancias de Double");
         }
     }
     

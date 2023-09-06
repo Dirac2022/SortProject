@@ -4,15 +4,16 @@
  */
 package uni.aed.gui;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import uni.aed.Comparator.NumberComparator;
-import uni.aed.ordenamiento.BubbleSort;
-import uni.aed.ordenamiento.Ordenamiento;
+import uni.aed.Comparator.DecimalComparator;
+import uni.aed.Comparator.IntegerComparator;
+//import uni.aed.ordenamiento.Ordenamiento;
+import uni.aed.Validator.Validator;
+import uni.aed.ordenamiento.Sort;
 
 /**
  *
@@ -26,8 +27,6 @@ public class SortJFrame extends javax.swing.JFrame {
     
     String [] columnas = {"Sort Algorithm", "# swaps", "# comparisons", "Running time (ns)"};
     String datos [][];
-    //ArrayList<String> columns;
-    //ArrayList<ArrayList<String>> data;
     DefaultTableModel modeloTabla;
     boolean descendente = false;
     
@@ -52,11 +51,15 @@ public class SortJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGroup = new javax.swing.ButtonGroup();
         panelInput = new javax.swing.JPanel();
         lblChooseSort = new javax.swing.JLabel();
         cboxSort = new javax.swing.JComboBox<>();
         lblMsgInput = new javax.swing.JLabel();
         txtValues = new javax.swing.JTextField();
+        cboxSorting = new javax.swing.JComboBox<>();
+        rbtnInteger = new javax.swing.JRadioButton();
+        rbtnDecimal = new javax.swing.JRadioButton();
         panelSorting = new javax.swing.JPanel();
         scrollpnList1 = new javax.swing.JScrollPane();
         listInicial = new javax.swing.JList<>();
@@ -76,7 +79,7 @@ public class SortJFrame extends javax.swing.JFrame {
 
         lblChooseSort.setText("Choose sort algorithm");
 
-        cboxSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bubble", "Insertion", "Binary Insertion", "Selection", "Bubble Object" }));
+        cboxSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bubble", "Insertion", "Binary Insertion", "Selection", "Bubble Object", "Merge" }));
 
         lblMsgInput.setText("Enter the values to be sorted:");
 
@@ -85,6 +88,14 @@ public class SortJFrame extends javax.swing.JFrame {
                 txtValuesActionPerformed(evt);
             }
         });
+
+        cboxSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bubble", "Insertion", "Binary Insertion", "Selection", "MergeSort", "QuickSort" }));
+
+        btnGroup.add(rbtnInteger);
+        rbtnInteger.setText("Integer");
+
+        btnGroup.add(rbtnDecimal);
+        rbtnDecimal.setText("Decimal");
 
         javax.swing.GroupLayout panelInputLayout = new javax.swing.GroupLayout(panelInput);
         panelInput.setLayout(panelInputLayout);
@@ -101,19 +112,34 @@ public class SortJFrame extends javax.swing.JFrame {
                         .addComponent(lblChooseSort, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cboxSort, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cboxSorting, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelInputLayout.createSequentialGroup()
+                        .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rbtnInteger, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rbtnDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelInputLayout.setVerticalGroup(
             panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInputLayout.createSequentialGroup()
                 .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblChooseSort)
-                    .addComponent(cboxSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboxSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboxSorting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(lblMsgInput)
-                .addGap(18, 18, 18)
-                .addComponent(txtValues, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelInputLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txtValues, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelInputLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(rbtnInteger)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbtnDecimal)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         scrollpnList1.setViewportView(listInicial);
@@ -154,7 +180,7 @@ public class SortJFrame extends javax.swing.JFrame {
                     .addComponent(btnSort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCleanLists, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(87, 87, 87)
-                .addComponent(scrollpList2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+                .addComponent(scrollpList2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
         panelSortingLayout.setVerticalGroup(
             panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,19 +251,18 @@ public class SortJFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(panelSorting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(6, 6, 6)
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelSorting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -259,52 +284,80 @@ public class SortJFrame extends javax.swing.JFrame {
 
     private void txtValuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValuesActionPerformed
         
-        String value = txtValues.getText();
-        try {
-            Double num1 = Double.parseDouble(value);
-            Integer num2 = Integer.parseInt(value);
-            modeloList1.addElement(txtValues.getText());
-            txtValues.setText("");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(rootPane, "Valor ingresado no válido", 
-                                        "Error ", JOptionPane.ERROR_MESSAGE, icono);
-            txtValues.selectAll();
+        if(btnGroup.getSelection() == null){
+            JOptionPane.showMessageDialog(rootPane, "Eliga el tipo de número a ingresar", 
+                                            "Lista vacía", JOptionPane.WARNING_MESSAGE, icono);
         }
+        else{
+            String value = txtValues.getText();
+        
+            if (Validator.isDouble(value) || Validator.isInteger(value)){
+                    modeloList1.addElement(txtValues.getText());
+                    txtValues.setText("");
+            }
+            else{  
+                JOptionPane.showMessageDialog(rootPane, "Valor ingresado no válido", 
+                                            "Error ", JOptionPane.ERROR_MESSAGE, icono);
+                txtValues.selectAll();
+            }
+        }
+        
     }//GEN-LAST:event_txtValuesActionPerformed
 
     private void btnSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortActionPerformed
-        NumberComparator comp = new NumberComparator();
+        
+        Comparator comp;
         Integer N = listInicial.getModel().getSize();
-        Integer [] X = new Integer[N];
-        for (int i = 0; i < N; i++)
+        Object [] X = new Object [N];
+        
+        if (rbtnInteger.isSelected()){
+            comp = new IntegerComparator();
+            X = new Integer [N];
+            for(int i = 0; i < N; i++)
             X[i] = Integer.parseInt(listInicial.getModel().getElementAt(i));
-        
-        Ordenamiento ord = new Ordenamiento();
-        
-        switch(cboxSort.getSelectedIndex()){
+        }
+        else {
+            comp = new DecimalComparator();
+            X = new Double [N];
+            for(int i = 0; i < N; i++)
+            X[i] = Double.parseDouble(listInicial.getModel().getElementAt(i));
+        }
+            
+        //Ordenamiento ord = new Ordenamiento();
+        Sort sort = new Sort();
+        switch(cboxSorting.getSelectedIndex()){
             case 0 ->{
-                ord.burbuja(X);
+                //ord.burbuja(X);
+                sort.bubble(X, comp);
+                System.out.println("Se ejecutó método bubble");
             }
             
             case 1 -> {
-                ord.insertion(X);
+                //ord.insertion(X);
+                sort.insertion(X, comp);
+                System.out.println("Se ejecutó método insertion");
             }
             
             case 2 -> {
-                ord.binaryInsertion(X);
+                //ord.binaryInsertion(X);
+                sort.binaryInsertion(X, comp);
+                System.out.println("Se ejecutó método binary insertion");
             }
             
             case 3 -> {
-                ord.selection(X);
+                //ord.selection(X);
+                sort.selection(X, comp);
+                System.out.println("Se ejecutó método selection");
             }
             
             case 4 -> {
-                try {
-                    ord.bubble(X, comp);
-                } catch (IllegalArgumentException e) {
-                    JOptionPane.showMessageDialog(rootPane, e.getMessage());
-                }
-                
+                    sort.mergeSort(X, comp);
+                    System.out.println("Se ejecutó método mergeSort");
+            }
+            
+            case 5 -> {
+                sort.quickSort(X, comp);
+                System.out.println("Se ejecutó el método quickSort ");
             }
         }
         
@@ -319,10 +372,10 @@ public class SortJFrame extends javax.swing.JFrame {
         
         listOrdenada.setModel(modeloList2);
         
-        String sortAlgorithm = cboxSort.getSelectedItem().toString();
-        int swaps = ord.getIntercambios();
-        int comparisons = ord.getComparaciones();
-        long runningTime = ord.getRunningTime();
+        String sortAlgorithm = cboxSorting.getSelectedItem().toString();
+        int swaps = sort.getIntercambios();
+        int comparisons = sort.getComparaciones();
+        long runningTime = sort.getRunningTime();
         
         String [] newRow = new String[4];
         newRow[0] = sortAlgorithm;
@@ -392,8 +445,10 @@ public class SortJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnCleanLists;
     private javax.swing.JButton btnCleanTable;
     private javax.swing.JButton btnClose;
+    private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnSort;
     private javax.swing.JComboBox<String> cboxSort;
+    private javax.swing.JComboBox<String> cboxSorting;
     private javax.swing.JCheckBox chboxDescending;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblChooseSort;
@@ -403,6 +458,8 @@ public class SortJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panelInput;
     private javax.swing.JPanel panelSorting;
     private javax.swing.JPanel panelStatistics;
+    private javax.swing.JRadioButton rbtnDecimal;
+    private javax.swing.JRadioButton rbtnInteger;
     private javax.swing.JScrollPane scrollpList2;
     private javax.swing.JScrollPane scrollpnList1;
     private javax.swing.JTable tabla;
