@@ -48,27 +48,6 @@ public class Ordenamiento {
         return X;
     }
     
-    public Object [] bubble (Object [] X, Comparator comp){
-        inicioEjecucion = System.nanoTime();
-        intercambios = 0;
-        comparaciones = 0;
-        Object aux = 0;
-        for (int i = 0; i < X.length - 1; i++){
-            for (int j = 0; j < X.length - 1; j++) {
-                comparaciones ++;
-                if (comp.compare(X[j], X[j+1]) > 0){
-                    aux = X[j];
-                    X[j] = X[j+1];
-                    X[j+1] = aux;
-                    intercambios ++;
-                }
-            }
-        }
-        finEjecucion = System.nanoTime();
-        return X;
-    }
-    
-    
     
     public Integer [] insertion(Integer [] X){
         inicioEjecucion = System.nanoTime();
@@ -146,26 +125,61 @@ public class Ordenamiento {
         finEjecucion = System.nanoTime();
         return X;
     }
+ 
     
-    public <K> void merge(K[] S1, K[] S2, K[] S, Comparator<K> comp){
-        int i = 0, j = 0;
-        while (i + j < S.length){
-            if (j == S2.length || (i < S1.length && comp.compare(S[i], S[j]) < 0))
-                S[i + j] = S[i ++];
-            else
-                S[i + j] = S2[j ++];
+    public Integer [] shellSort(Integer [] X){
+        int salto, N, j, k;
+        N = X.length;
+        salto = N/2;
+        while(salto > 0) {
+            for(int i = salto; i < N; i++){
+                j = i - salto;
+                while (j >= 0) {
+                    k = j + salto;
+                    if (X[j] <= X[k])
+                        j = 0;
+                    else
+                        intercambio(X, j, k);
+                    j = j - salto;
+                }
+            }
+            salto = salto / 2;
         }
+        return X;
     }
     
-    public <K> void mergeSort(K[] S, Comparator<K> comp){
-        int n = S.length;
-        if (n < 2 ) return;
-        int mid = n / 2;
-        K[] S1 = java.util.Arrays.copyOfRange(S, 0, mid);
-        K[] S2 = java.util.Arrays.copyOfRange(S, mid, n);
-        mergeSort(S1, comp);
-        mergeSort(S2, comp);
-        merge(S1, S2, S, comp);
+    private void intercambio(Integer X[], int p, int q){
+        int temp = X[p];
+        X[p] = X[q];
+        X[q] = X[temp];
+    }
+    
+    public Integer [] QuickSort(Integer [] X){
+        Integer [] y;
+        y = QuickSort(X, 0, X.length);
+        return y;
+    }
+    
+    public Integer [] QuickSort(Integer [] X, int start, int end){
+        if (start < end){
+            int pIndex = QuickSortPartition(X, start, end);
+            QuickSort(X, start, pIndex - 1);
+            QuickSort(X, pIndex + 1, end);
+        }
+        return X;
+    }
+    
+    private int QuickSortPartition(Integer [] X, int start, int end){
+        int pivot = X[end];
+        int pIndex = start;
+        for(int i = start; i < end; i ++){
+            if (X[i] <= pivot){
+                intercambio(X, i, pIndex);
+                pIndex ++;
+            }
+        }
+        intercambio(X, pIndex, end);
+        return pIndex;
     }
     
 }

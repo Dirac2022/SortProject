@@ -14,7 +14,6 @@ public class Sort {
     
     int intercambios, comparaciones;
     long inicioEjecucion, finEjecucion, tiempoEjecucion;
-    static long startTime, endTime, totalTime;
     
     public int getIntercambios(){
         return intercambios;
@@ -26,10 +25,6 @@ public class Sort {
     
     public long getRunningTime(){
         return finEjecucion - inicioEjecucion;
-    }
-    
-    public long getTotalTime(){
-        return endTime - startTime;
     }
     
 
@@ -153,9 +148,7 @@ public class Sort {
         mergeSort(S2, comp);
         merge(S1, S2, S, comp);
     }
-    
-    
-    
+
     
     private <T> void quickSortInPlace(T[] S, Comparator<T> comp, int a, int b){
         if (a >= b) return;
@@ -164,6 +157,7 @@ public class Sort {
         T pivot = S[b];
         T temp;
         while (left <= right) {
+            comparaciones ++;
             while (left <= right && comp.compare(S[left], pivot) < 0)
                 left ++;
             while (left <= right && comp.compare(S[right], pivot) > 0)
@@ -174,12 +168,14 @@ public class Sort {
                 S[right] = temp;
                 left ++;
                 right --;
+                intercambios ++;
             }
         }
         
         temp = S[left];
         S[left] = S[b];
         S[b] = temp;
+        intercambios ++;
         
         quickSortInPlace(S, comp, a, left - 1);
         quickSortInPlace(S, comp, left + 1, b);
@@ -190,7 +186,42 @@ public class Sort {
         quickSortInPlace(X, comp, 0, X.length - 1);
         finEjecucion = System.nanoTime();
     }
-
+    
+    public Integer [] shellSort(Integer [] X){
+        inicioEjecucion = System.nanoTime();
+        int salto, N, j, k;
+        N = X.length;
+        salto = N/2;
+        while(salto > 0) {
+            for(int i = salto; i < N; i++){
+                j = i - salto;
+                while (j >= 0) {
+                    k = j + salto;
+                    if (X[j] <= X[k]){
+                        comparaciones++;
+                        j = 0;
+                    }
+                        
+                    else{
+                        intercambio(X, j, k);
+                        intercambios++;
+                    }
+                        
+                        
+                    j = j - salto;
+                }
+            }
+            salto = salto / 2;
+        }
+        finEjecucion = System.nanoTime();
+        return X;
+    }
+    
+    private void intercambio(Integer X[], int p, int q){
+        int temp = X[p];
+        X[p] = X[q];
+        X[q] = temp;
+    }
     
 }
 
