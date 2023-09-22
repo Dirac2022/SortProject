@@ -182,4 +182,47 @@ public class Ordenamiento {
         return pIndex;
     }
     
+    
+    
+    
+    private int HeapSortMaxChild(Integer [] X, int loc, int end) {
+        int result, left, right;
+        left = 2 * loc + 1;
+        right = 2 * loc + 2;
+        if (right <= end && X[left] < X[right])
+            result = right;
+        else
+            result = left;
+        return result;
+    }
+    
+    private Integer [] HeapSortExtract(Integer [] X) {
+        
+        Integer [] Y = new Integer [X.length];
+        int current, maxChildIndex;
+        boolean done;
+        
+        for (int i = X.length - 1; i >= 0; i--) {
+            Y[i] = X[0];            // Putting the root node in the actual position of the new heap
+            X[0] = X[i];            // Replace the root node's value with the last nodes's value from the heap
+            current = 0;
+            done = false;
+            while (!done) {
+                if (2 * current + 1 > i)
+                    done = true;
+                else {  // Si el nodo actual tiene al menos un hijo
+                   maxChildIndex = HeapSortMaxChild(X, current, i);
+                   if (X[current] < X[maxChildIndex]){
+                       intercambio(X, current, maxChildIndex);
+                       current = maxChildIndex;
+                   }
+                   else
+                       done = true;    
+                }
+            }
+        }
+        
+        return X;
+    }
+    
 }

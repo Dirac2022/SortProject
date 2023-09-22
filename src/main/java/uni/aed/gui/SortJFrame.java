@@ -13,13 +13,13 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import uni.aed.Comparator.DecimalComparator;
 import uni.aed.Comparator.IntegerComparator;
-//import uni.aed.ordenamiento.Ordenamiento;
+import uni.aed.ordenamiento.Complejidad;
 import uni.aed.Validator.Validator;
 import uni.aed.ordenamiento.Sort;
 
 /**
  *
- * @author mitch
+ * @author MITCHEL SOTO CUYA
  */
 public class SortJFrame extends javax.swing.JFrame {
 
@@ -68,6 +68,10 @@ public class SortJFrame extends javax.swing.JFrame {
         rbtnRandom = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         txtArraySize = new javax.swing.JTextField();
+        txtInicial = new javax.swing.JLabel();
+        txtFinal = new javax.swing.JLabel();
+        spnInicial = new javax.swing.JSpinner();
+        spnFinal = new javax.swing.JSpinner();
         panelSorting = new javax.swing.JPanel();
         scrollpnList1 = new javax.swing.JScrollPane();
         listInicial = new javax.swing.JList<>();
@@ -141,9 +145,20 @@ public class SortJFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setText("Array size, by default, is 1");
 
         txtArraySize.setEditable(false);
+
+        txtInicial.setForeground(new java.awt.Color(153, 153, 153));
+        txtInicial.setText("Inicial");
+
+        txtFinal.setForeground(new java.awt.Color(153, 153, 153));
+        txtFinal.setText("Final");
+
+        spnInicial.setEnabled(false);
+
+        spnFinal.setEnabled(false);
 
         javax.swing.GroupLayout panelInputLayout = new javax.swing.GroupLayout(panelInput);
         panelInput.setLayout(panelInputLayout);
@@ -160,24 +175,35 @@ public class SortJFrame extends javax.swing.JFrame {
             .addGroup(panelInputLayout.createSequentialGroup()
                 .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInputLayout.createSequentialGroup()
-                        .addComponent(lblMsgInput, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rbtnManual, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(rbtnRandom, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelInputLayout.createSequentialGroup()
-                        .addComponent(txtValues, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbtnInteger, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rbtnDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelInputLayout.createSequentialGroup()
                         .addComponent(btnGenerate)
                         .addGap(30, 30, 30)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtArraySize, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(txtArraySize, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spnFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelInputLayout.createSequentialGroup()
+                        .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelInputLayout.createSequentialGroup()
+                                .addComponent(txtValues, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rbtnInteger, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rbtnDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelInputLayout.createSequentialGroup()
+                                .addComponent(lblMsgInput, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(rbtnManual, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbtnRandom, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelInputLayout.setVerticalGroup(
             panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,11 +226,15 @@ public class SortJFrame extends javax.swing.JFrame {
                         .addComponent(rbtnInteger)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rbtnDecimal)))
-                .addGap(18, 18, 18)
+                .addGap(31, 31, 31)
                 .addGroup(panelInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGenerate)
                     .addComponent(jLabel1)
-                    .addComponent(txtArraySize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtArraySize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtInicial)
+                    .addComponent(txtFinal)
+                    .addComponent(spnInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -238,7 +268,7 @@ public class SortJFrame extends javax.swing.JFrame {
         panelSortingLayout.setHorizontalGroup(
             panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSortingLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(13, 13, 13)
                 .addComponent(scrollpnList1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(73, 73, 73)
                 .addGroup(panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -246,7 +276,7 @@ public class SortJFrame extends javax.swing.JFrame {
                     .addComponent(btnSort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCleanLists, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(87, 87, 87)
-                .addComponent(scrollpList2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(scrollpList2, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
         );
         panelSortingLayout.setVerticalGroup(
             panelSortingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,15 +357,16 @@ public class SortJFrame extends javax.swing.JFrame {
                             .addComponent(panelStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(panelInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelSorting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(panelSorting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelInput, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(panelInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(panelSorting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -518,9 +549,16 @@ public class SortJFrame extends javax.swing.JFrame {
             n = 1;
         }
         
+        Integer inicial = (Integer)spnInicial.getValue();
+        Integer fin = (Integer)spnFinal.getValue();
         GenerateNumber gen = new GenerateNumber();
-        Object [] X = gen.generateArray(n);
-        //
+        Object [] X;
+        if(fin - inicial < 1){
+            X = gen.generateArray(n);
+        }
+        else{
+            X = gen.generateArray(inicial, fin, n);
+        }
         for (int i = 0; i < X.length; i++) {
             modeloList1.add(i, X[i].toString());
         }
@@ -531,6 +569,12 @@ public class SortJFrame extends javax.swing.JFrame {
         txtValues.setEditable(false);
         btnGenerate.setEnabled(true);
         txtArraySize.setEditable(true);
+        txtInicial.setForeground(Color.BLACK);
+        txtFinal.setForeground(Color.BLACK);
+        spnInicial.setEnabled(true);
+        spnFinal.setEnabled(true);
+        
+                
         
         
     }//GEN-LAST:event_rbtnRandomActionPerformed
@@ -539,6 +583,10 @@ public class SortJFrame extends javax.swing.JFrame {
         btnGenerate.setEnabled(false);
         txtArraySize.setEditable(false);
         txtValues.setEditable(true);
+        txtInicial.setForeground(Color.GRAY);
+        txtFinal.setForeground(Color.GRAY);
+        spnInicial.setEnabled(false);
+        spnFinal.setEnabled(false);
     }//GEN-LAST:event_rbtnManualActionPerformed
 
     /**
@@ -602,8 +650,12 @@ public class SortJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbtnRandom;
     private javax.swing.JScrollPane scrollpList2;
     private javax.swing.JScrollPane scrollpnList1;
+    private javax.swing.JSpinner spnFinal;
+    private javax.swing.JSpinner spnInicial;
     private javax.swing.JTable tabla;
     private javax.swing.JTextField txtArraySize;
+    private javax.swing.JLabel txtFinal;
+    private javax.swing.JLabel txtInicial;
     private javax.swing.JTextField txtValues;
     // End of variables declaration//GEN-END:variables
 }

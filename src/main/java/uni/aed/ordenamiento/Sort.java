@@ -9,6 +9,7 @@ import java.util.Comparator;
 /**
  *
  * @author mitch
+ * ESTOS SON METODOS PROPIOS, NO FUERON PARTE DE LA CLASE
  */
 public class Sort {
     

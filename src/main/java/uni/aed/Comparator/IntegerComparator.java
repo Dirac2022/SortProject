@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author mitch
+ * @author MITCHEL SOTO CUYA
  */
 public class IntegerComparator implements Comparator{
     
